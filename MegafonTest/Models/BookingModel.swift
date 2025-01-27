@@ -14,12 +14,14 @@ struct Booking {
     let price: Float
     let distance: Float
     var guestCount: Int
+    var checkInDate: Date
+    var checkOutDate: Date?
     
     var isBooked: Bool {
         return entity != nil
     }
     
-    let entity: HotelEntity?
+    var entity: HotelEntity?
     
     init(
         name: String,
@@ -27,7 +29,9 @@ struct Booking {
         rating: Float,
         price: Float,
         distance: Float,
-        guestCount: Int
+        guestCount: Int,
+        checkInDate: Date,
+        checkOutDate: Date?
     ) {
         self.name = name
         self.image = image
@@ -36,6 +40,8 @@ struct Booking {
         self.distance = distance
         self.guestCount = guestCount
         self.entity = nil
+        self.checkInDate = checkInDate
+        self.checkOutDate = checkOutDate
     }
     
     init(entity: HotelEntity) {
@@ -45,6 +51,8 @@ struct Booking {
         self.rating = entity.rating
         self.price = entity.price
         self.distance = entity.distance
+        self.checkInDate = entity.checkInDate ?? Date()
+        self.checkOutDate = entity.checkOutDate
         self.guestCount = Int(entity.guestCount)
     }
 }

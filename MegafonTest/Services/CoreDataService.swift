@@ -40,14 +40,26 @@ class CoreDataService {
         return try persistentContainer.viewContext.fetch(fetchRequest)
     }
     
-    func saveHotel(name: String, rating: Float, price: Float, distance: Float, guestCount: Int) {
+    @discardableResult
+    func saveHotel(
+        name: String,
+        rating: Float,
+        price: Float,
+        distance: Float,
+        guestCount: Int,
+        checkInDate: Date,
+        checkOutDate: Date?
+    ) -> HotelEntity {
         let hotel = HotelEntity(context: persistentContainer.viewContext)
         hotel.name = name
         hotel.rating = rating
         hotel.price = price
         hotel.distance = distance
         hotel.guestCount = Int16(guestCount)
+        hotel.checkInDate = checkInDate
+        hotel.checkOutDate = checkOutDate
         saveContext()
+        return hotel
     }
     
     func deleteHotel(hotel: HotelEntity) {

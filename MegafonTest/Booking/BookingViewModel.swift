@@ -5,14 +5,9 @@
 //  Created by Ботурбек Имомдодов on 26/01/25.
 //
 
-import RxSwift
-import RxCocoa
 
 class BookingViewModel {
-    
-    private let disposeBag = DisposeBag()
-    
-    let bookings: BehaviorRelay<[Booking]> = BehaviorRelay(value: [])
+    let bookings: Box<[Booking]> = Box([])
     
     init() {
         fetchBookings()
@@ -21,11 +16,9 @@ class BookingViewModel {
     func fetchBookings() {
         do {
             let entities = try CoreDataService.shared.fetchHotels()
-            let bookings = entities.map { Booking(entity: $0) }
-            
-            self.bookings.accept(bookings)
-        }
-        catch(let error) {
+            let fetchedBookings = entities.map { Booking(entity: $0) }
+            bookings.value = fetchedBookings
+        } catch let error {
             print("Error fetching bookings: \(error)")
         }
     }
@@ -33,8 +26,7 @@ class BookingViewModel {
     func deleteBooking(at index: Int) {
         var currentBookings = bookings.value
         let booking = currentBookings.remove(at: index)
-        
-        bookings.accept(currentBookings)
+        bookings.value = currentBookings
         
         if let entity = booking.entity {
             CoreDataService.shared.deleteHotel(hotel: entity)

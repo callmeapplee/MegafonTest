@@ -6,16 +6,27 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
 class HotelFilterViewController: UIViewController {
     private let viewModel: HotelSearchViewModel
-    private let disposeBag = DisposeBag()
-    
+
     private let priceFilterSlider: FilterSlider
     private let ratingFilterSlider: FilterSlider
     private let distanceFilterSlider: FilterSlider
+    
+    private let checkInPicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.minimumDate = Date()
+        return picker
+    }()
+    
+    private let checkOutPicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.minimumDate = Date()
+        return picker
+    }()
     
     private let applyButton: UIButton = {
         let button = UIButton(type: .system)
@@ -23,7 +34,6 @@ class HotelFilterViewController: UIViewController {
         button.layer.cornerRadius = 8
         button.backgroundColor = .systemBlue
         button.setTitleColor(.white, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -32,6 +42,8 @@ class HotelFilterViewController: UIViewController {
             priceFilterSlider,
             ratingFilterSlider,
             distanceFilterSlider,
+            createPickerView(title: "Check-in Date", picker: checkInPicker),
+            createPickerView(title: "Check-out Date (Optional)", picker: checkOutPicker),
             applyButton
         ])
         stackView.axis = .vertical
@@ -39,6 +51,12 @@ class HotelFilterViewController: UIViewController {
         stackView.alignment = .fill
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
+    }()
+    
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
     }()
     
     init(viewModel: HotelSearchViewModel) {
@@ -84,28 +102,54 @@ class HotelFilterViewController: UIViewController {
     
     private func setupUI() {
         title = "Filters"
-        
         view.backgroundColor = .white
-        view.addSubview(stackView)
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
     
     private func setupBindings() {
-        applyButton.rx.tap
-            .bind { [weak self] in
-                guard let self = self else { return }
-                var currentFilter = viewModel.filter.value
-                currentFilter.priceRange = priceFilterSlider.slider.value
-                currentFilter.rating = self.ratingFilterSlider.slider.value
-                currentFilter.distance = self.distanceFilterSlider.slider.value
-                self.viewModel.filter.accept(currentFilter)
-                self.dismiss(animated: true)
-            }
-            .disposed(by: disposeBag)
+        applyButton.addTarget(self, action: #selector(applyFilters), for: .touchUpInside)
+        checkInPicker.addTarget(self, action: #selector(updateCheckOutMinimumDate), for: .valueChanged)
+    }
+    
+    private func createPickerView(title: String, picker: UIDatePicker) -> UIView {
+        let label = UILabel()
+        label.text = title
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        
+        let stackView = UIStackView(arrangedSubviews: [label, picker])
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .fill
+        return stackView
+    }
+    
+    @objc private func applyFilters() {
+        var currentFilter = viewModel.filter.value
+        currentFilter.priceRange = priceFilterSlider.slider.value
+        currentFilter.rating = ratingFilterSlider.slider.value
+        currentFilter.distance = distanceFilterSlider.slider.value
+        currentFilter.checkInDate = checkInPicker.date
+        currentFilter.checkOutDate = checkOutPicker.date
+        viewModel.filter.value = currentFilter
+        dismiss(animated: true)
+    }
+    
+    @objc private func updateCheckOutMinimumDate() {
+        checkOutPicker.minimumDate = checkInPicker.date
     }
 }

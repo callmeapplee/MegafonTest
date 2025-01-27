@@ -7,17 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA9B4BCD2D47DBD90068A321 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9B4BCC2D47DBD90068A321 /* Box.swift */; };
+		FA9B4BCF2D47EB9C0068A321 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9B4BCE2D47EB9C0068A321 /* NotificationService.swift */; };
 		FAF8A56B2D4535E3009C835E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8A56A2D4535E3009C835E /* AppDelegate.swift */; };
 		FAF8A56D2D4535E3009C835E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8A56C2D4535E3009C835E /* SceneDelegate.swift */; };
 		FAF8A56F2D4535E3009C835E /* HotelSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8A56E2D4535E3009C835E /* HotelSearchViewController.swift */; };
 		FAF8A5742D4535E4009C835E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAF8A5732D4535E4009C835E /* Assets.xcassets */; };
 		FAF8A5772D4535E4009C835E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAF8A5752D4535E4009C835E /* LaunchScreen.storyboard */; };
 		FAF8A57F2D4539B5009C835E /* HotelSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8A57E2D4539B5009C835E /* HotelSearchViewModel.swift */; };
-		FAF8A5822D453A16009C835E /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = FAF8A5812D453A16009C835E /* RxBlocking */; };
-		FAF8A5842D453A16009C835E /* RxBlocking-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = FAF8A5832D453A16009C835E /* RxBlocking-Dynamic */; };
-		FAF8A5862D453A16009C835E /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = FAF8A5852D453A16009C835E /* RxCocoa */; };
-		FAF8A5882D453A16009C835E /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = FAF8A5872D453A16009C835E /* RxCocoa-Dynamic */; };
-		FAF8A58A2D453A16009C835E /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = FAF8A5892D453A16009C835E /* RxRelay */; };
 		FAF8A58C2D453A49009C835E /* HotelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8A58B2D453A49009C835E /* HotelModel.swift */; };
 		FAF8A58E2D453E7C009C835E /* FilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8A58D2D453E7C009C835E /* FilterModel.swift */; };
 		FAF8A5902D453ED4009C835E /* HotelFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8A58F2D453ED4009C835E /* HotelFilterViewController.swift */; };
@@ -33,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA9B4BCC2D47DBD90068A321 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		FA9B4BCE2D47EB9C0068A321 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		FAF8A5672D4535E3009C835E /* MegafonTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MegafonTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAF8A56A2D4535E3009C835E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAF8A56C2D4535E3009C835E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,17 +59,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAF8A5992D467E79009C835E /* Kingfisher in Frameworks */,
-				FAF8A58A2D453A16009C835E /* RxRelay in Frameworks */,
-				FAF8A5882D453A16009C835E /* RxCocoa-Dynamic in Frameworks */,
-				FAF8A5862D453A16009C835E /* RxCocoa in Frameworks */,
-				FAF8A5822D453A16009C835E /* RxBlocking in Frameworks */,
-				FAF8A5842D453A16009C835E /* RxBlocking-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA9B4BCB2D47DBCC0068A321 /* Box */ = {
+			isa = PBXGroup;
+			children = (
+				FA9B4BCC2D47DBD90068A321 /* Box.swift */,
+			);
+			path = Box;
+			sourceTree = "<group>";
+		};
 		FAF8A55E2D4535E3009C835E = {
 			isa = PBXGroup;
 			children = (
@@ -91,13 +93,14 @@
 		FAF8A5692D4535E3009C835E /* MegafonTest */ = {
 			isa = PBXGroup;
 			children = (
+				FA9B4BCB2D47DBCC0068A321 /* Box */,
 				FAF8A5AC2D46A042009C835E /* App */,
 				FAF8A5AB2D46A036009C835E /* Services */,
 				FAF8A5A62D469FE1009C835E /* HotelSearch */,
 				FAF8A5A72D469FF5009C835E /* HotelDetail */,
 				FAF8A5A82D46A003009C835E /* Components */,
-				FAF8A5A92D46A00C009C835E /* Models */,
 				FAF8A5AA2D46A01D009C835E /* Booking */,
+				FAF8A5A92D46A00C009C835E /* Models */,
 				FAF8A5732D4535E4009C835E /* Assets.xcassets */,
 				FAF8A5752D4535E4009C835E /* LaunchScreen.storyboard */,
 				FAF8A5782D4535E4009C835E /* Info.plist */,
@@ -155,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				FAF8A59D2D468E01009C835E /* CoreDataService.swift */,
+				FA9B4BCE2D47EB9C0068A321 /* NotificationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -185,11 +189,6 @@
 			);
 			name = MegafonTest;
 			packageProductDependencies = (
-				FAF8A5812D453A16009C835E /* RxBlocking */,
-				FAF8A5832D453A16009C835E /* RxBlocking-Dynamic */,
-				FAF8A5852D453A16009C835E /* RxCocoa */,
-				FAF8A5872D453A16009C835E /* RxCocoa-Dynamic */,
-				FAF8A5892D453A16009C835E /* RxRelay */,
 				FAF8A5982D467E79009C835E /* Kingfisher */,
 			);
 			productName = MegafonTest;
@@ -221,7 +220,6 @@
 			);
 			mainGroup = FAF8A55E2D4535E3009C835E;
 			packageReferences = (
-				FAF8A5802D453A16009C835E /* XCRemoteSwiftPackageReference "RxSwift" */,
 				FAF8A5972D467E78009C835E /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = FAF8A5682D4535E3009C835E /* Products */;
@@ -259,10 +257,12 @@
 				FAF8A56B2D4535E3009C835E /* AppDelegate.swift in Sources */,
 				FAF8A58E2D453E7C009C835E /* FilterModel.swift in Sources */,
 				FAF8A56D2D4535E3009C835E /* SceneDelegate.swift in Sources */,
+				FA9B4BCF2D47EB9C0068A321 /* NotificationService.swift in Sources */,
 				FAF8A5922D466832009C835E /* FilterSlider.swift in Sources */,
 				FAF8A59C2D46893B009C835E /* Booking.xcdatamodeld in Sources */,
 				FAF8A5A22D469621009C835E /* BookingModel.swift in Sources */,
 				FAF8A5962D467A5B009C835E /* HotelDetailViewModel.swift in Sources */,
+				FA9B4BCD2D47DBD90068A321 /* Box.swift in Sources */,
 				FAF8A5A42D4696DF009C835E /* BookingViewController.swift in Sources */,
 				FAF8A57F2D4539B5009C835E /* HotelSearchViewModel.swift in Sources */,
 			);
@@ -406,9 +406,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WA5ETF4855;
+				DEVELOPMENT_TEAM = JH3LZ5HN5R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MegafonTest/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -420,8 +421,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = megafon.MegafonTest;
+				PRODUCT_BUNDLE_IDENTIFIER = megafon.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -433,9 +435,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WA5ETF4855;
+				DEVELOPMENT_TEAM = JH3LZ5HN5R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MegafonTest/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -447,8 +450,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = megafon.MegafonTest;
+				PRODUCT_BUNDLE_IDENTIFIER = megafon.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -479,14 +483,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		FAF8A5802D453A16009C835E /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.8.0;
-			};
-		};
 		FAF8A5972D467E78009C835E /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -498,31 +494,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FAF8A5812D453A16009C835E /* RxBlocking */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAF8A5802D453A16009C835E /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxBlocking;
-		};
-		FAF8A5832D453A16009C835E /* RxBlocking-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAF8A5802D453A16009C835E /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxBlocking-Dynamic";
-		};
-		FAF8A5852D453A16009C835E /* RxCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAF8A5802D453A16009C835E /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxCocoa;
-		};
-		FAF8A5872D453A16009C835E /* RxCocoa-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAF8A5802D453A16009C835E /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxCocoa-Dynamic";
-		};
-		FAF8A5892D453A16009C835E /* RxRelay */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAF8A5802D453A16009C835E /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxRelay;
-		};
 		FAF8A5982D467E79009C835E /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FAF8A5972D467E78009C835E /* XCRemoteSwiftPackageReference "Kingfisher" */;

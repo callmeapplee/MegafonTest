@@ -6,15 +6,12 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
 class HotelSearchViewController: UIViewController {
     private let searchBar = UISearchBar()
     private let tableView = UITableView()
     private let filterButton = UIBarButtonItem(title: "Filters", style: .plain, target: nil, action: nil)
     private let viewModel = HotelSearchViewModel()
-    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,67 +22,76 @@ class HotelSearchViewController: UIViewController {
     private func setupUI() {
         title = "Hotels"
         view.backgroundColor = .white
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "HotelCell")
+        
         view.addSubview(searchBar)
         view.addSubview(tableView)
-        
         navigationItem.rightBarButtonItem = filterButton
         
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "HotelCell")
         
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: -8),
+            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
     private func setupBindings() {
-        searchBar.rx.text.orEmpty
-            .bind { [weak self] query in
-                guard let self = self else { return }
-                var currentFilter = self.viewModel.filter.value
-                currentFilter.searchQuery = query
-                viewModel.filter.accept(currentFilter)
-            }
-            .disposed(by: disposeBag)
+        viewModel.filteredHotels.bind { [weak self] hotels in
+            self?.tableView.reloadData()
+        }
         
-        viewModel.filteredHotels
-            .observe(on: MainScheduler.instance)
-            .bind(to: tableView.rx.items(cellIdentifier: "HotelCell", cellType: UITableViewCell.self)) { _, hotel, cell in
-                cell.textLabel?.text = "\(hotel.name) - $\(hotel.price) - \(hotel.rating)★ - \(hotel.distance)km"
-            }
-            .disposed(by: disposeBag)
+        searchBar.delegate = self
+        tableView.dataSource = self
+        tableView.delegate = self
         
-        filterButton.rx.tap
-            .bind { [weak self] in
-                guard let self = self else { return }
-                let filterVC = HotelFilterViewController(viewModel: viewModel)
-                let navController = UINavigationController(rootViewController: filterVC)
-                present(navController, animated: true)
-            }
-            .disposed(by: disposeBag)
-        
-        searchBar.rx.searchButtonClicked
-            .bind { [weak self] in
-                guard let self = self else { return }
-                searchBar.resignFirstResponder()
-            }
-            .disposed(by: disposeBag)
-        
-        tableView.rx.modelSelected(Hotel.self)
-            .bind { [weak self] selectedHotel in
-                guard let self = self else { return }
-                let hotelDetailViewController = HotelDetailViewController(viewModel: HotelDetailViewModel(booking: selectedHotel.booking))
-                navigationController?.pushViewController(hotelDetailViewController, animated: true)
-            }
-            .disposed(by: disposeBag)
+        filterButton.target = self
+        filterButton.action = #selector(filterButtonTapped)
+    }
+    
+    @objc private func filterButtonTapped() {
+        let filterVC = HotelFilterViewController(viewModel: viewModel)
+        let navController = UINavigationController(rootViewController: filterVC)
+        present(navController, animated: true)
+    }
+}
+
+extension HotelSearchViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        var currentFilter = viewModel.filter.value
+        currentFilter.searchQuery = searchText
+        viewModel.filter.value = currentFilter
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}
+
+extension HotelSearchViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.filteredHotels.value.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HotelCell", for: indexPath)
+        let hotel = viewModel.filteredHotels.value[indexPath.row]
+        cell.textLabel?.text = "\(hotel.name) - $\(hotel.price) - \(hotel.rating)★ - \(hotel.distance)km"
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let selectedHotel = viewModel.filteredHotels.value[indexPath.row]
+        let detailViewModel = HotelDetailViewModel(booking: viewModel.getBooking(by: selectedHotel))
+        let detailVC = HotelDetailViewController(viewModel: detailViewModel)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

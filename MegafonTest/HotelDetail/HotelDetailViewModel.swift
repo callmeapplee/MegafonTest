@@ -6,15 +6,12 @@
 //
 
 import Foundation
-import RxSwift
-import RxCocoa
 
 class HotelDetailViewModel {
-    let booking: BehaviorRelay<Booking>
-    private let disposeBag = DisposeBag()
+    var booking: Box<Booking>
     
     init(booking: Booking) {
-        self.booking = BehaviorRelay<Booking>(value: booking)
+        self.booking = Box<Booking>(booking)
     }
     
     func book() {
@@ -23,13 +20,19 @@ class HotelDetailViewModel {
             CoreDataService.shared.saveContext()
         }
         else {
-            CoreDataService.shared.saveHotel(
+            NotificationService.shared.scheduleCheckInReminder(for: booking.value.checkInDate)
+            let entity = CoreDataService.shared.saveHotel(
                 name: booking.value.name,
                 rating: booking.value.rating,
                 price: booking.value.price,
                 distance: booking.value.distance,
-                guestCount: booking.value.guestCount
+                guestCount: booking.value.guestCount,
+                checkInDate: booking.value.checkInDate,
+                checkOutDate: booking.value.checkOutDate
             )
+            var currentBooking = booking.value
+            currentBooking.entity = entity
+            booking.value = currentBooking
         }
     }
 }

@@ -20,15 +20,4 @@ struct Hotel {
             rating >= filter.rating &&
             distance <= filter.distance
     }
-    
-    var booking: Booking {
-        Booking(
-            name: name,
-            image: image,
-            rating: rating,
-            price: price,
-            distance: distance,
-            guestCount: 1
-        )
-    }
 }

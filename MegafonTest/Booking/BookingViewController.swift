@@ -6,24 +6,21 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
 class BookingViewController: UIViewController {
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.fetchBookings()
-    }
-    
+
     private let viewModel = BookingViewModel()
-    private let disposeBag = DisposeBag()
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "BookingCell")
         return tableView
     }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.fetchBookings()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +30,6 @@ class BookingViewController: UIViewController {
     
     private func setupUI() {
         title = "Booking"
-        
         view.backgroundColor = .white
         view.addSubview(tableView)
         
@@ -46,23 +42,42 @@ class BookingViewController: UIViewController {
     }
     
     private func setupBindings() {
-        viewModel.bookings
-            .bind(to: tableView.rx.items(cellIdentifier: "BookingCell")) { (row, booking, cell) in
-                cell.textLabel?.text = "Hotel: \(booking.name) - Guests: \(booking.guestCount)"
-            }
-            .disposed(by: disposeBag)
-        tableView.rx.modelSelected(Booking.self)
-            .subscribe(onNext: { [weak self] booking in
-                guard let self = self else { return }
-                let viewController = HotelDetailViewController(viewModel: HotelDetailViewModel(booking: booking))
-                navigationController?.pushViewController(viewController, animated: true)
-            })
-            .disposed(by: disposeBag)
-        tableView.rx.itemDeleted
-            .subscribe(onNext: { [weak self] indexPath in
-                guard let self = self else { return }
-                self.viewModel.deleteBooking(at: indexPath.row)
-            })
-            .disposed(by: disposeBag)
+        viewModel.bookings.bind { [weak self] bookings in
+            guard let self = self else { return }
+            self.reloadTableView(with: bookings)
+        }
+    }
+    
+    private func reloadTableView(with bookings: [Booking]) {
+        DispatchQueue.main.async {
+            self.tableView.dataSource = self
+            self.tableView.delegate = self
+            self.tableView.reloadData()
+        }
+    }
+}
+
+extension BookingViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.bookings.value.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BookingCell", for: indexPath)
+        let booking = viewModel.bookings.value[indexPath.row]
+        cell.textLabel?.text = "Hotel: \(booking.name) - Guests: \(booking.guestCount)"
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let booking = viewModel.bookings.value[indexPath.row]
+        let detailVC = HotelDetailViewController(viewModel: HotelDetailViewModel(booking: booking))
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            viewModel.deleteBooking(at: indexPath.row)
+        }
     }
 }

@@ -12,4 +12,6 @@ struct Filter {
     var priceRange: Float = 1000
     var rating: Float = 0
     var distance: Float = 20
+    var checkInDate: Date = Date()
+    var checkOutDate: Date?
 }

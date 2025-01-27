@@ -6,11 +6,9 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
+import UIKit
 
 class FilterSlider: UIView {
-    
     private let step: Float
     private let valueFormat: String
     
@@ -25,15 +23,12 @@ class FilterSlider: UIView {
         return label
     }()
     
-    
     private let valueLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
         label.textColor = .gray
         return label
     }()
-    
-    private let disposeBag = DisposeBag()
     
     init(
         title: String,
@@ -54,7 +49,7 @@ class FilterSlider: UIView {
         slider.minimumValue = minValue
         slider.maximumValue = maxValue
         slider.setValue(value ?? 0, animated: true)
-        valueLabel.text = String(format: valueFormat, slider.value)
+        updateValueLabel(slider.value)
     }
     
     required init?(coder: NSCoder) {
@@ -82,13 +77,16 @@ class FilterSlider: UIView {
     }
     
     private func setupBindings() {
-        slider.rx.value
-            .bind { [weak self] value in
-                guard let self = self else { return }
-                let formattedValue = round(value / self.step) * self.step
-                slider.value = formattedValue
-                valueLabel.text = String(format: valueFormat, formattedValue)
-            }
-            .disposed(by: disposeBag)
+        slider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
+    }
+    
+    @objc private func sliderValueChanged(_ sender: UISlider) {
+        let formattedValue = round(sender.value / step) * step
+        slider.value = formattedValue
+        updateValueLabel(formattedValue)
+    }
+    
+    private func updateValueLabel(_ value: Float) {
+        valueLabel.text = String(format: valueFormat, value)
     }
 }
